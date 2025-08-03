@@ -9,8 +9,9 @@ dbConnect()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors({
-    origin:"http://localhost:5173",
-    methods:["GET","POST","PUT","DELETE","PATCH"]
+    origin:["http://localhost:5173","http://localhost:5174"],
+    methods:["GET","POST","PUT","DELETE","PATCH"],
+    credentials:true
 }))
 
 
@@ -28,6 +29,7 @@ const bookRoute = require("./routes/book/book.route")
 const cartRoute = require("./routes/user/cart/cart.route")
 const orderRoute = require("./routes/user/order/order.route")
 const paymentRoute = require("./routes/user/payment/payment.route")
+const profileRoute = require("./routes/user/profile/profile.route")
 
 
 //apis
@@ -36,6 +38,7 @@ app.use("/api/books",bookRoute)
 app.use("/api/cart",cartRoute)
 app.use("/api/order",orderRoute)
 app.use("/api/payment",paymentRoute)
+app.use("/api/profile",profileRoute)
 
 
 
