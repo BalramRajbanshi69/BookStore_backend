@@ -30,6 +30,7 @@ const cartRoute = require("./routes/user/cart/cart.route")
 const orderRoute = require("./routes/user/order/order.route")
 const paymentRoute = require("./routes/user/payment/payment.route")
 const profileRoute = require("./routes/user/profile/profile.route")
+const getAllDatasRoute = require("./routes/admin/getAllDatas")
 
 
 //apis
@@ -39,6 +40,7 @@ app.use("/api/cart",cartRoute)
 app.use("/api/order",orderRoute)
 app.use("/api/payment",paymentRoute)
 app.use("/api/profile",profileRoute)
+app.use("/api/admin",getAllDatasRoute)
 
 
 
