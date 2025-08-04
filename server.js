@@ -9,7 +9,7 @@ dbConnect()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors({
-    origin:["https://book-store-system-virid.vercel.app","http://localhost:5174"],
+    origin:["https://book-store-system-virid.vercel.app","https://book-store-admin-ee1v.vercel.app"],
     methods:["GET","POST","PUT","DELETE","PATCH"],
     credentials:true
 }))
