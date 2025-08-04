@@ -1,16 +1,25 @@
 const Book = require("../../models/book/book.model");
 const BACKEND_URL = process.env.BACKEND_URL
 const fs = require("fs")
+const path = require("path");
 
 // create book(admin)
 exports.createBook = async (req, res) => {
-    
-        const file = req.file;
-        let filePath;
-        if (!file) {
-            filePath = "https://www.bing.com/images/search?q=books+image&id=0D7B8D91EEB148C7EEC09E98BE10785ACACA3785&FORM=IACFIR";
+        // const file = req.file;
+        // let filePath;
+        // if (!file) {
+        //     filePath = "https://www.bing.com/images/search?q=books+image&id=0D7B8D91EEB148C7EEC09E98BE10785ACACA3785&FORM=IACFIR";
+        // } else {
+        //     filePath = BACKEND_URL + req.file.filename;
+        // }
+
+
+        const userId = req.user?.id
+        let imageURL;
+        if (!req.file) {
+            imageURL = "https://www.bing.com/images/search?q=books+image&id=0D7B8D91EEB148C7EEC09E98BE10785ACACA3785&FORM=IACFIR";
         } else {
-            filePath = BACKEND_URL + req.file.filename;
+            imageURL = req.file.path;
         }
 
         const { title, author, description, publication, price, stockQuantity, bookStatus } = req.body;
@@ -30,7 +39,8 @@ exports.createBook = async (req, res) => {
             price,
             stockQuantity,
             bookStatus,
-            bookImage: filePath
+            bookImage: [imageURL],
+            userId
         });
         
         res.status(200).json({

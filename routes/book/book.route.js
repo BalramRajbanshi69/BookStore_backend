@@ -7,8 +7,10 @@ const catchAsync = require("../../services/catchAsync");
 const {createBook,getAllBooks,singleBook, editBook, deleteBook} = require("../../controllers/book/book.controller")
 const router = express.Router();
 
-const { multer, storage } = require("../../middleware/multer");
-const upload = multer({ storage: storage });
+// const { multer, storage } = require("../../middleware/multer");
+// const upload = multer({ storage: storage });
+
+const upload = require("../../middleware/multer")
 
 router.route("/")
     .post(isAuthenticated, permitTo("ADMIN"), upload.single("bookImage"), catchAsync(createBook)) 
