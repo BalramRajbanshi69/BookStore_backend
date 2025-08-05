@@ -61,7 +61,7 @@ exports.createBook = async (req, res) => {
 
 exports.getAllBooks = async(req,res)=>{
     
-        const allBooks = await Book.find().select("+bookImage");                        
+        const allBooks = await Book.find();                        
         if(allBooks.length ===0){
         res.status(404).json({
          message: "No books found",
