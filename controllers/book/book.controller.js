@@ -1,7 +1,7 @@
 const Book = require("../../models/book/book.model");
 const BACKEND_URL = process.env.BACKEND_URL
 const fs = require("fs")
-// const path = require("path")
+const path = require("path")
 const cloudinary = require("cloudinary").v2;
 
 // create book(admin)
