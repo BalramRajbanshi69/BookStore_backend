@@ -1,7 +1,8 @@
 const Book = require("../../models/book/book.model");
 const BACKEND_URL = process.env.BACKEND_URL
 const fs = require("fs")
-const path = require("path");
+// const path = require("path")
+const cloudinary = require("cloudinary").v2;
 
 // create book(admin)
 exports.createBook = async (req, res) => {
@@ -14,18 +15,22 @@ exports.createBook = async (req, res) => {
         // }
 
 
-        const userId = req.user?.id
-        let imageURL;
-        if (!req.file) {
-            imageURL = "https://www.bing.com/images/search?q=books+image&id=0D7B8D91EEB148C7EEC09E98BE10785ACACA3785&FORM=IACFIR";
-        } else {
-            imageURL = req.file.path;
-        }
+     const userId = req.user?.id;
+     let imageURL;
+    
+    if (!req.file) {
+        imageURL = "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D";
+    } else {
+ 
+        imageURL = req.file?.path;
+    }
+    
 
-        const { title, author, description, publication, price, stockQuantity, bookStatus } = req.body;
+
+        const { title, author, description, publication, price, stockQuantity, bookStatus} = req.body;
         
 
-        if (!title || !author || !description || !publication || !price || !stockQuantity || !bookStatus) {
+        if (!title || !author || !description || !publication || !price || !stockQuantity || !bookStatus ) {
             return res.status(400).json({
                 message: "All fields are required!"
             });
@@ -43,6 +48,7 @@ exports.createBook = async (req, res) => {
             userId
         });
         
+        
         res.status(200).json({
             message: "Book created successfully",
             data: book
@@ -55,7 +61,7 @@ exports.createBook = async (req, res) => {
 
 exports.getAllBooks = async(req,res)=>{
     
-        const allBooks = await Book.find();
+        const allBooks = await Book.find().select("+bookImage");                        
         if(allBooks.length ===0){
         res.status(404).json({
          message: "No books found",

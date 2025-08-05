@@ -29,8 +29,8 @@ const bookSchema = new mongoose.Schema({
         enum:["available","unavailable"]
     },
     bookImage:{
-        type:String,
-        required:[true,"Image of book is required"]
+        type:[String],
+        required:[true,"Image of book is required"],
     }
 },{
     timestamps:true
