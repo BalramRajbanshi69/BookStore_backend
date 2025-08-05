@@ -158,17 +158,33 @@ exports.verifyPidx = async(req,res)=>{
         }
     })
 
-    if(response.data.status === "Completed"){
-        // database modification
-        let order = await Order.find({ "paymentDetails.pidx": pidx }); // find the order by pidx
-        order[0].paymentDetails.method = "khalti"; // set the payment method to khalti
-        order[0].paymentDetails.status = "paid"; // set the payment status to paid
-        await order[0].save(); // save the order with the updated payment details
+    // if(response.data.status === "Completed"){
+    //     // database modification
+    //     let order = await Order.find({ "paymentDetails.pidx": pidx }); // find the order by pidx
+    //     order[0].paymentDetails.method = "khalti"; // set the payment method to khalti
+    //     order[0].paymentDetails.status = "paid"; // set the payment status to paid
+    //     await order[0].save(); // save the order with the updated payment details
+
+
+     if (response.data.status === "Completed") {
+            // Find the order by pidx using findOne for efficiency and safety
+            let order = await Order.findOne({ "paymentDetails.pidx": pidx });
+
+            if (!order) {
+                return res.status(404).json({ message: "Order not found for the given pidx" });
+            }
+
+            // Update order status and save
+            order.paymentDetails.method = "khalti";
+            order.paymentDetails.status = "paid";
+            await order.save();
 
         // empty user cart after successfully payment
         const user = await User.findById(userId);
-        user.cart = []
-        await user.save();
+        if (user) {
+                user.cart = [];
+                await user.save();
+            }
 
        return res.status(200).json({
             message:"Payment verified successfully"
