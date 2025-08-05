@@ -142,8 +142,7 @@ exports.initializeKhaltiPayment = async(req,res)=>{
         message:"Payment successfully",
         paymentUrl : response.data.payment_url            // so that after successful payment, navigate to payment_url khalti page . see response.data in console
     })
-    
-    
+     
 }
 
 
