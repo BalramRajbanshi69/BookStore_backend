@@ -120,7 +120,7 @@ exports.initializeKhaltiPayment = async(req,res)=>{
     }
 
     const data ={
-        return_url : `${process.env.FRONTEND_URL}`,  // /api/payment is from app.js api        // return URL where the user will be redirected after payment
+        return_url : `${process.env.FRONTEND_URL}/success`,  // /api/payment is from app.js api        // return URL where the user will be redirected after payment
         amount:amount * 100,                          // amount in rupees
         purchase_order_id: orderId, 
         purchase_order_name: "orderName_" + orderId,           // purchase order name, you can use any name you want
