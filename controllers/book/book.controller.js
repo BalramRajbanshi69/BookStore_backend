@@ -1,7 +1,9 @@
 const Book = require("../../models/book/book.model");
 const BACKEND_URL = process.env.BACKEND_URL
 const fs = require("fs")
-const path = require("path")
+const path = require("path");
+const User = require("../../models/auth/user.model");
+const Order = require("../../models/user/order/order.model");
 const cloudinary = require("cloudinary").v2;
 
 // create book(admin)
@@ -305,3 +307,99 @@ exports.deleteBook = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
+// update book status(admin)
+exports.updateBookStatus = async(req,res)=>{
+    const id = req.params.id; // assuming order ID is passed as a URL parameter
+    const { bookStatus } = req.body; // assuming order status is passed in the request body
+
+    // validate order status
+    if(!bookStatus || !["available", "unavailable"].includes(bookStatus.toLowerCase())) {
+        return res.status(400).json({ message: "Invalid book status" });
+    }
+
+    // check if order exists or not
+    const book = await Book.findById(id);
+    if (!book) {
+        return res.status(404).json({ message: "book not found" });
+    }
+
+    // update the order status
+    const updatedBook = await Book.findByIdAndUpdate(id,{
+        bookStatus
+    },{
+        new:true
+    })
+  
+
+    res.status(200).json({
+        message: "Book status updated successfully",
+        data: updatedBook
+    });
+  
+}
+
+
+
+
+// update price and stock
+
+
+
+// update book stock and price
+exports.updateBookStockAndPrice = async(req,res)=>{
+    const id = req.params.id; // assuming order ID is passed as a URL parameter
+    const { stockQuantity,price } = req.body; // assuming order status is passed in the request body
+
+    // validate order status
+    if(!stockQuantity && !price) {
+        return res.status(400).json({ message: "provide all fields" });
+    }
+
+    // check if order exists or not
+    const book = await Book.findById(id);
+    if (!book) {
+        return res.status(404).json({ message: "book not found" });
+    }
+
+    // update the order status
+    const updatedBook = await Book.findByIdAndUpdate(id,{
+        stockQuantity : stockQuantity ? stockQuantity : book.stockQuantity, 
+        price : price ? price : book.price
+    },{
+        new:true
+    })
+  
+    res.status(200).json({
+        message: "Book stock and price updated successfully",
+        data: updatedBook
+    });
+
+    
+}
+
+
+
+
+
+// get orders of a book (how much order has been done by a user  in a single book)
+exports.getOrdersOfBook = async(req,res)=>{
+  const {id:bookId} = req.params;
+  
+  const book = await Book.findById(bookId)
+if(!book){
+  return res.status(400).json({
+    message:"No book found!"
+  })
+}
+
+const orders = await Order.find({"items.book":bookId}) // to get order of book
+// console.log(orders);
+
+res.status(200).json({
+  message:"Orders of book fetched successfully",
+  data:orders
+})
+}
