@@ -113,9 +113,10 @@ exports.initializeKhaltiPayment = async (req, res) => {
         return res.status(400).json({ message: "Amount must be equal to totalAmount" });
     }
 
+    const amountInPaisa = Math.round(amount * 100);
     const data = {
         return_url: `${process.env.FRONTEND_URL}/success`,
-        amount: amount * 100, // Convert to paisa
+        amount: amountInPaisa, // Convert to paisa
         purchase_order_id: orderId,
         purchase_order_name: "orderName_" + orderId,
         // Use an environment variable here for consistency
